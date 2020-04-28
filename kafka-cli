@@ -1,0 +1,94 @@
+Create new topic 
+kafka-topics.sh --zookeeper ${zk_url} --topic ${topic_name} --partitions ${num_paritions} --replication-factor ${replication_factor}
+kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic test-topic --partitions 3 --replication-factor 1
+
+
+List Topics
+kafka-topics.sh --zookeeper 127.0.0.1:2181 --list
+
+Describe Topic
+kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic test-topic --describe
+
+Delete Topic
+kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic test-topic --delete
+
+Kafka Console Producer
+
+kafka-console-producer.sh --broker-list ${kafka_url} --topic ${topic_name}
+kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test-topic
+
+Add Producer Property
+kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test-topic --producer-property acks=all
+
+Producing to a new topic which does not exist
+
+kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic new-topic(this topic does not exist)
+>this is a test message to a topic not created -- First messsage you get a warning since the topic does not exist
+[2020-04-28 23:47:48,358] WARN [Producer clientId=console-producer] Error while fetching metadata with correlation id 3 : {new-topic=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+>test message again -- Works fine post first message
+(528) [23:47] 300068800@BLRM-300068800 ~/kafka_2.12-2.5.0 $ kafka-topics.sh --zookeeper 127.0.0.1:2181 --list(shows two topics now)
+new-topic
+test-topic
+
+New topic which does not exist has just one parition and one replica. This default can be changed in server.properties by setting 
+the num.partitions property to a number greater than 1.
+kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic new-topic --describe
+Topic: new-topic	PartitionCount: 1	ReplicationFactor: 1	Configs:
+	Topic: new-topic	Partition: 0	Leader: 0	Replicas: 0	Isr: 0
+  
+
+Kafka Console Consumer
+If you dont specify --from-beginning, the consumer will read only messages which are published after it has started.
+
+kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test-topic --from-beginning 
+
+
+Kafka Console Consumer Group 
+kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic test-topic --group ${group_name}
+
+In case of multiple consumers running for the same group, the messages will rebalance based on the number of consumers. If one
+of the consumer in the group is brought down, the messages will be rebalanced between the remaining consumers. 
+We can specify --from-beginning if we want to read all the messages on a topic. Once a group has consumed all the messages
+in the topic, the offsets are committed, so re-running the consumer with the --from-beginning will not read any more messages
+unless new messages are published.
+
+Manage Kafka Consumer Groups
+
+List all consumer groups
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+Describe a consumer group
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my_first_application
+
+Consumer group 'my_first_application' has no active members.
+
+GROUP                TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+my_first_application test-topic      2          1               1               0               -               -               -
+my_first_application test-topic      0          3               3               0               -               -               -
+my_first_application test-topic      1          0               0               0               -               -               -
+
+If an consumer group has not consumed any pending messages in the topic, that will show up in the lag column. 
+
+When the consumer group is running the output of describe is 
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my_first_application
+
+GROUP                TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                          HOST            CLIENT-ID
+my_first_application test-topic      0          3               3               0               consumer-my_first_application-1-bbae8240-bff5-47a3-8489-cca92eeb140a /192.168.1.4    consumer-my_first_application-1
+my_first_application test-topic      1          0               0               0               consumer-my_first_application-1-bbae8240-bff5-47a3-8489-cca92eeb140a /192.168.1.4    consumer-my_first_application-1
+my_first_application test-topic      2          1               1               0               consumer-my_first_application-1-bbae8240-bff5-47a3-8489-cca92eeb140a /192.168.1.4    consumer-my_first_appli
+
+Resetting Offsets
+Resetting offsets requires one of the options for --reset-options and for --topic. Refer to the help for details. Can be done
+only when the consumer is stopped. Resetting will replay the messages to which the offset is reset. In this case it would be 0, 
+since we are usign the --to-earliest option for --reset-offsets.
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my_first_application --reset-offsets --to-earliest --execute --topic test-topic
+
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+my_first_application           test-topic                     0          0
+my_first_application           test-topic                     1          0
+my_first_application           test-topic                     2          0
+
+
+GUI Application -- http://www.kafkatool.com/
