@@ -1,6 +1,6 @@
 Create new topic 
-kafka-topics.sh --zookeeper ${zk_url} --topic ${topic_name} --partitions ${num_paritions} --replication-factor ${replication_factor}
-kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic test-topic --partitions 3 --replication-factor 1
+kafka-topics.sh --zookeeper ${zk_url} --create --topic ${topic_name} --partitions ${num_paritions} --replication-factor ${replication_factor}
+kafka-topics.sh --zookeeper 127.0.0.1:2181 --create --topic twitter_tweets --partitions 6 --replication-factor 1
 
 
 List Topics
