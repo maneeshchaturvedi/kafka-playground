@@ -22,7 +22,8 @@
     </build>
     <modules>
         <module>kafka-basics</module>
-        <module>kafka-twitter</module>
+        <module>kafka-twitter-producer</module>
+        <module>kafka-elasticsearch-consumer</module>
     </modules>
 
 </project>
