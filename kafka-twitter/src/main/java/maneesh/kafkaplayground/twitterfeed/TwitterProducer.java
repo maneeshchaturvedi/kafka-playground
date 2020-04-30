@@ -1,4 +1,4 @@
-package com.maneesh.kafkaplayground.twitterfeed;
+package maneesh.kafkaplayground.twitterfeed;
 
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class TwitterProducer {
     private static final String BOOTSTRAP_SERVER = "127.0.0.1:9092";
     private final String TOPIC= "twitter_tweets";
-    private List<String> terms = Lists.newArrayList("irrfan khan");
+    private List<String> terms = Lists.newArrayList("irrfan khan","rishi kapoor","tennis");
     private final String consumerKey = "kfElVKFF4pjZrHIXc2hGV3EHT";
     private final String consumerSecret = "Jv73FIs6vLia8MSkP2aMnGUP3NqQlq1JRAom7cmS1ft4PwMfBU";
     private final String token = "57272508-826CVJQFLmAHiAjXg4v8V5Deag5zbBk7lQ4Bqwljg";
@@ -70,6 +70,16 @@ public class TwitterProducer {
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        //safe Producer -- set these properties
+        properties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,"true");
+        properties.setProperty(ProducerConfig.ACKS_CONFIG,"all");
+        properties.setProperty(ProducerConfig.RETRIES_CONFIG,Integer.toString(Integer.MAX_VALUE));
+        properties.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,"5"); //kafka >1.1 else keep at 1
+
+        //high throughput producer
+        properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG,"snappy");
+        properties.setProperty(ProducerConfig.LINGER_MS_CONFIG,"20");
+        properties.setProperty(ProducerConfig.BATCH_SIZE_CONFIG,Integer.toString(32*1024));
 
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
         return producer;

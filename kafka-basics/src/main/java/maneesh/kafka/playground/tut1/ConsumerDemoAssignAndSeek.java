@@ -1,4 +1,4 @@
-package com.maneesh.kafka.playground.tut1;
+package maneesh.kafka.playground.tut1;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

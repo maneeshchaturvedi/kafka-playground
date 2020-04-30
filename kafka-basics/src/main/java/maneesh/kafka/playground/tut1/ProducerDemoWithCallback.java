@@ -1,4 +1,4 @@
-package com.maneesh.kafka.playground.tut1;
+package maneesh.kafka.playground.tut1;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
