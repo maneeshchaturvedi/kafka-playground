@@ -1,3 +1,9 @@
+Start ZK
+zookeeper-server-start.sh config/zookeeper.properties
+Start Kafka server
+kafka-server-start.sh config/server.properties
+
+
 Create new topic 
 kafka-topics.sh --zookeeper ${zk_url} --create --topic ${topic_name} --partitions ${num_paritions} --replication-factor ${replication_factor}
 kafka-topics.sh --zookeeper 127.0.0.1:2181 --create --topic twitter_tweets --partitions 6 --replication-factor 1
