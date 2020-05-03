@@ -24,11 +24,11 @@ import java.util.concurrent.TimeUnit;
 public class TwitterProducer {
     private static final String BOOTSTRAP_SERVER = "127.0.0.1:9092";
     private final String TOPIC= "twitter_tweets";
-    private List<String> terms = Lists.newArrayList("irrfan khan","rishi kapoor","tennis");
-    private final String consumerKey = "kfElVKFF4pjZrHIXc2hGV3EHT";
-    private final String consumerSecret = "Jv73FIs6vLia8MSkP2aMnGUP3NqQlq1JRAom7cmS1ft4PwMfBU";
-    private final String token = "57272508-826CVJQFLmAHiAjXg4v8V5Deag5zbBk7lQ4Bqwljg";
-    private final String secret = "CS9jvILxpNaj3rd3tHnBNRtDxscjaSlbpUKqeLba4VTpB";
+    private List<String> terms = Lists.newArrayList("tennis");
+    private final String consumerKey = "Your twitter consumer key";
+    private final String consumerSecret = "Your twitter consumer secret";
+    private final String token = "your twitter token";
+    private final String secret = "your twitter secret";
     private final Logger logger = LoggerFactory.getLogger(TwitterProducer.class);
 
     public TwitterProducer() {
