@@ -28,9 +28,9 @@ import java.util.Arrays;
 import java.util.Properties;
 
 public class ElasticSearchConsumerIdempotent {
-    private final String hostName = "kafka-playground-604013629.ap-southeast-2.bonsaisearch.net";
-    private final String username = "ucs1cliomr";
-    private final String password = "cabjlplng";
+    private final String hostName = "your bonsai.io elastic search url";
+    private final String username = "your bonsai.io username";
+    private final String password = "your bonsai.io password";
     private static final String INDEX = "twitter";
     private static final String TYPE = "tweets";
     private static final String BOOTSTRAP_SERVER = "127.0.0.1:9092";
